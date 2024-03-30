@@ -6,6 +6,7 @@ import { UserModel } from './entity/user.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([UserModel]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
