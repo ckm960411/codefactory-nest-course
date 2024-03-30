@@ -3,13 +3,12 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 import { PostsModel } from './entities/posts.entity';
-import { PostModel, PostsService } from './posts.service';
+import { PostsService } from './posts.service';
 
 @Controller('posts')
 export class PostsController {
@@ -43,13 +42,13 @@ export class PostsController {
   // 4) PUT /posts/:id
   // id에 해당되는 post를 변경한다.
   @Put(':id')
-  putPost(
+  async putPost(
     @Param('id') id: string,
     @Body('author') author?: string,
     @Body('title') title?: string,
     @Body('content') content?: string,
-  ) {
-    this.postsService.updatePost(+id, author, title, content);
+  ): Promise<PostsModel> {
+    return this.postsService.updatePost(+id, author, title, content);
   }
 
   // 5) DELETE /posts/:id
