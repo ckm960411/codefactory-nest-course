@@ -54,7 +54,7 @@ export class PostsController {
   // 5) DELETE /posts/:id
   // id에 해당되는 post를 삭제한다.
   @Delete(':id')
-  deletePost(@Param('id') id: string) {
+  deletePost(@Param('id') id: string): Promise<number> {
     return this.postsService.deletePost(+id);
   }
 }
