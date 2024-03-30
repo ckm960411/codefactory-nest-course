@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { PostModel } from './post.entity';
 import { ProfileModel } from './proflie.entity';
 
 export enum Role {
@@ -69,5 +71,8 @@ export class UserModel {
   additionalId: number;
 
   @OneToOne(() => ProfileModel, (profile) => profile.user)
-  profile: ProfileModel; //
+  profile: ProfileModel;
+
+  @OneToMany(() => PostModel, (post) => post.author)
+  posts: PostModel;
 }
