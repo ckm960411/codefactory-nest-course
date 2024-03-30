@@ -8,6 +8,11 @@ import {
   VersionColumn,
 } from 'typeorm';
 
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity()
 export class UserModel {
   /**
@@ -27,11 +32,18 @@ export class UserModel {
     name: 'title', // 데이터베이스 컬럼 이름
     nullable: true,
     update: true, // true면 처음 저장할 때만 값 지정 가능
-    select: false, // find() 를 실행할 때 기본으로 값을 불러올지, default: true
+    select: true, // find() 를 실행할 때 기본으로 값을 불러올지, default: true
     default: 'default title', // 아무갓도 입력하지 않았을 때 value
     unique: false, // 컬럼 중 유니크한 값이 돼야하는지 (회원가입시 이메일 등)
   })
   title: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
 
   // 데이터가 생성되는 날짜와 시간이 자동으로 찍힌다.
   @CreateDateColumn()
