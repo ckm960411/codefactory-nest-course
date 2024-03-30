@@ -79,7 +79,7 @@ export class UserModel {
      * true일 경우 find() 시에 relations 를 하지 않아도 가져와준다
      * - default: false
      */
-    eager: true,
+    eager: false,
     /**
      * true일 경우 저장할 때 relation을 한번에 같이 저장 가능
      * - default: false

@@ -27,7 +27,56 @@ export class AppController {
 
   @Get('users')
   getUsers() {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      /**
+       * select: 어떤 프로퍼티를 선택할지
+       * - 기본은 모든 프로퍼티를 가져온다.
+       * - 정의할 경우 정의한 프로퍼티만 가져온다.
+       */
+      select: {
+        id: true,
+        createdAt: true,
+        version: true,
+        // 관계를 가져올 때도 어떤 프로퍼티만 가져올지 선택이 가능하다
+        profile: {
+          id: true,
+        },
+      },
+      /**
+       * where: 필터링할 조건을 입력하게 된다.
+       * - 기본적으론 교집합(AND)으로 동작
+       * - 합집합(OR)으로 넣고 싶은 경우 배열로 넣는다.
+       * - 관계로도 필터링할 수 있다.
+       */
+      // where: {
+      //   id: 1,
+      //   version: 2,
+      // },
+      where: [{ id: 1 }, { version: 2 }, { profile: { id: 1 } }],
+      /**
+       * relation: 관계를 가져온다.
+       */
+      relations: {
+        profile: true,
+      },
+      /**
+       * order: 오름차 or 내림차순
+       */
+      order: {
+        id: 'ASC', // ID를 오름차순으로 정렬
+      },
+      /**
+       * skip: 처음 몇개를 제외할지
+       * - default: 0
+       */
+      skip: 0,
+      /**
+       * take: 몇개를 가져올지
+       * - default: 0 (0이면 모두를 가져온다)
+       * - 숫자를 지정할 경우 그 숫자만큼의 개수만 가져온다.
+       */
+      take: 0,
+    });
   }
 
   @Patch('users/:id')
