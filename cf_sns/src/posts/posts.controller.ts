@@ -8,6 +8,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { PostsModel } from './entities/posts.entity';
 import { PostModel, PostsService } from './posts.service';
 
 @Controller('posts')
@@ -17,7 +18,7 @@ export class PostsController {
   // 1) GET /posts
   // 모든 Post를 가져온다.
   @Get()
-  getPosts(): PostModel[] {
+  async getPosts(): Promise<PostsModel[]> {
     return this.postsService.getAllPost();
   }
 
