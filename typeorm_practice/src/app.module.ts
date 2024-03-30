@@ -12,11 +12,12 @@ import {
 import { StudentModel, TeacherModel } from './entity/person.entity';
 import { PostModel } from './entity/post.entity';
 import { ProfileModel } from './entity/proflie.entity';
+import { TagModel } from './entity/tag.entity';
 import { UserModel } from './entity/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserModel, ProfileModel, PostModel]),
+    TypeOrmModule.forFeature([UserModel, ProfileModel, PostModel, TagModel]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -35,6 +36,7 @@ import { UserModel } from './entity/user.entity';
         AirplaneModel,
         ProfileModel,
         PostModel,
+        TagModel,
       ],
       synchronize: true,
     }),
