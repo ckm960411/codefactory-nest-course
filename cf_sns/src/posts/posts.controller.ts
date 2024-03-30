@@ -25,18 +25,18 @@ export class PostsController {
   // 2) GET /posts/:id
   // id에 해당되는 Post를 가져온다.
   @Get(':id')
-  getPost(@Param('id') id: string): Promise<PostsModel> {
+  async getPost(@Param('id') id: string): Promise<PostsModel> {
     return this.postsService.getPostById(+id);
   }
 
   // 3) POST /posts
   // POST를 생성한다.
   @Post()
-  postPost(
+  async postPost(
     @Body('author') author: string,
     @Body('title') title: string,
     @Body('content') content: string,
-  ) {
+  ): Promise<PostsModel> {
     return this.postsService.createPost(author, title, content);
   }
 
