@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostModel } from './entity/post.entity';
@@ -27,12 +27,7 @@ export class AppController {
 
   @Get('users')
   getUsers() {
-    return this.userRepository.find({
-      relations: {
-        profile: true,
-        posts: true,
-      },
-    });
+    return this.userRepository.find();
   }
 
   @Patch('users/:id')
@@ -50,13 +45,26 @@ export class AppController {
 
   @Post('user/profile')
   async createUserAndProfile() {
+    /**
+     * default: cascase가 false 라면 각각 따로 생성해준다.
+     */
+    // const user = await this.userRepository.save({
+    //   email: 'asdf@codefactory.ai',
+    // });
+    //
+    // const profile = await this.profileRepository.save({
+    //   profileImg: 'asdf.jpg',
+    //   user,
+    // });
+
+    /**
+     * cascasde true인 경우 User 를 생성할 때 한번에 Profile을 생성할 수 있다.
+     */
     const user = await this.userRepository.save({
       email: 'asdf@codefactory.ai',
-    });
-
-    const profile = await this.profileRepository.save({
-      profileImg: 'asdf.jpg',
-      user,
+      profile: {
+        profileImg: 'asdf.jpg',
+      },
     });
 
     return user;
@@ -70,6 +78,12 @@ export class AppController {
 
     await this.postRepository.save({ title: 'post 1', author: user });
     await this.postRepository.save({ title: 'post 2', author: user });
+  }
+
+  @Delete('user/profile/:id')
+  async deleteProfile(@Param('id') id: number) {
+    await this.profileRepository.delete(+id);
+    return true;
   }
 
   @Post('posts/tags')

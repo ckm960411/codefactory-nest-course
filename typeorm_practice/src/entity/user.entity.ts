@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -70,7 +71,38 @@ export class UserModel {
   @Generated('increment') // 'increment' | 'uuid' | 'rowId'
   additionalId: number;
 
-  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  /**
+   * NOTICE: 이 relations option 은 JoinColumn이 붙은 쪽에서만 유효하다!
+   */
+  @OneToOne(() => ProfileModel, (profile) => profile.user, {
+    /**
+     * true일 경우 find() 시에 relations 를 하지 않아도 가져와준다
+     * - default: false
+     */
+    eager: true,
+    /**
+     * true일 경우 저장할 때 relation을 한번에 같이 저장 가능
+     * - default: false
+     * - 가령 User 를 생성할 때 Profile 에 데이터를 넣는다고 Profile까지 같이 생성되지 않지만, true 일 경우 User 생성시에 Profile이 같이 생성된다.
+     */
+    cascade: true,
+    /**
+     * 모든 relations는 관계를 맺고 있는 반대쪽이 없을 수도 있다.
+     * - default: true
+     * - 생성과 동시에 relation이 nullable하지 않으려면 cascasde 를 true 로 놓고 써야 같이 의미가 있다.
+     */
+    nullable: true,
+    /**
+     * 관계가 삭제했을 때의 옵션
+     * - no action: 아무것도 안 함
+     * - cascade: 참조하는 Row도 같이 삭제
+     * - set null: 참조하는 Row에서 참조 id 를 null로 변경
+     * - set default: 테이블의 기본 세팅으로 설정
+     * - restrict: 참조하고 있는 Row가 있는 경우 참조당하는 Row 삭제 불가
+     */
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   profile: ProfileModel;
 
   @OneToMany(() => PostModel, (post) => post.author)
