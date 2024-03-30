@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { ProfileModel } from './proflie.entity';
 
 export enum Role {
   USER = 'user',
@@ -27,16 +29,19 @@ export class UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'varchar', // 데이터베이스에서 인지하는 컬럼 타입이며, 자동으로 유추됨
-    name: 'title', // 데이터베이스 컬럼 이름
-    nullable: true,
-    update: true, // true면 처음 저장할 때만 값 지정 가능
-    select: true, // find() 를 실행할 때 기본으로 값을 불러올지, default: true
-    default: 'default title', // 아무갓도 입력하지 않았을 때 value
-    unique: false, // 컬럼 중 유니크한 값이 돼야하는지 (회원가입시 이메일 등)
-  })
-  title: string;
+  @Column()
+  email: string;
+
+  // @Column({
+  //   type: 'varchar', // 데이터베이스에서 인지하는 컬럼 타입이며, 자동으로 유추됨
+  //   name: 'title', // 데이터베이스 컬럼 이름
+  //   nullable: true,
+  //   update: true, // true면 처음 저장할 때만 값 지정 가능
+  //   select: true, // find() 를 실행할 때 기본으로 값을 불러올지, default: true
+  //   default: 'default title', // 아무갓도 입력하지 않았을 때 value
+  //   unique: false, // 컬럼 중 유니크한 값이 돼야하는지 (회원가입시 이메일 등)
+  // })
+  // title: string;
 
   @Column({
     type: 'enum',
@@ -62,4 +67,7 @@ export class UserModel {
   @Column()
   @Generated('increment') // 'increment' | 'uuid' | 'rowId'
   additionalId: number;
+
+  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  profile: ProfileModel; //
 }
