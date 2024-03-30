@@ -25,7 +25,7 @@ export class PostsController {
   // 2) GET /posts/:id
   // id에 해당되는 Post를 가져온다.
   @Get(':id')
-  getPost(@Param('id') id: string) {
+  getPost(@Param('id') id: string): Promise<PostsModel> {
     return this.postsService.getPostById(+id);
   }
 
