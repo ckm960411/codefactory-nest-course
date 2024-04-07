@@ -32,6 +32,98 @@ export class AppController {
     private readonly tagRepository: Repository<TagModel>,
   ) {}
 
+  @Post('sample')
+  async sample() {
+    /**
+     * create: 모델에 해당되는 객체 생성 - 저장은 안함
+     */
+    // const user1 = this.userRepository.create({
+    //   email: 'test@codefactory.ai',
+    // });
+
+    /**
+     * save: 저장
+     */
+    // const user2 = this.userRepository.save({
+    //   email: 'test_user2@codefactory.ai',
+    // });
+
+    /**
+     * preload:
+     * - 입력된 값을 기반으로 데이터베이스에 있는 데이터를 불러오고,
+     * - 추가 입력된 값으로 데이터베이스에서 가져온 값들을 대체함.
+     * - 저장X
+     */
+    // const user3 = await this.userRepository.preload({
+    //   id: 101,
+    //   email: 'preload@preload.com',
+    // });
+
+    /**
+     * delete: 삭제하기
+     */
+    // await this.userRepository.delete(103);
+
+    /**
+     * increment: 프로퍼티 값을 증가시키기
+     * - 첫 번째 인자는 필터링
+     * - 두 번째 인자는 증가시킬 프로퍼티
+     * - 세 번째 인자는 증가시킬 값
+     */
+    // await this.userRepository.increment({ id: 1 }, 'count', 2);
+
+    /**
+     * decrement: 프로퍼티 값을 감소시키기
+     */
+    // await this.userRepository.decrement({ id: 1 }, 'count', 2);
+
+    /**
+     * count: 개수 카운팅
+     */
+    // const count = await this.userRepository.count({
+    //   where: { email: ILike('%0%') },
+    // });
+
+    /**
+     * sum: 총합 구하기
+     * - 첫 번째 인자는 값을 더할 프로퍼티
+     * - 두 번째 인자는 필터링
+     */
+    // const sum = await this.userRepository.sum('count', { email: ILike('%0%') });
+
+    /**
+     * average: 평균값 구하기
+     * - 첫 번째 인자는 평균을 구할 프로퍼티
+     * - 두 번째 인자는 필터링
+     */
+    // const average = await this.userRepository.average('count', {
+    //   id: LessThanOrEqual(4),
+    // });
+
+    /**
+     * minimum: 최소값 구하기
+     */
+    // const min = await this.userRepository.minimum('count', {
+    //   id: LessThanOrEqual(4),
+    // });
+
+    /**
+     * maximum: 최대값 구하기
+     */
+    // const max = await this.userRepository.maximum('count', {
+    //   id: LessThanOrEqual(4),
+    // });
+
+    /**
+     * findAndCount: 일치하는 결과를 가져오며 숫자와 함께 반환
+     */
+    const usersAndCount = await this.userRepository.findAndCount({
+      take: 3,
+    });
+
+    return usersAndCount;
+  }
+
   @Post('users')
   async postUser() {
     for (let i = 0; i < 100; i++) {
@@ -45,6 +137,7 @@ export class AppController {
   @Get('users')
   getUsers() {
     return this.userRepository.find({
+      order: { id: 'ASC' },
       where: {
         /**
          * Not(): 아닌 경우 가져오기
